@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <queue>
 #include <algorithm>
 
 using namespace std;
@@ -10,15 +11,24 @@ int n, m;
 int check[10001] = { 0 };
 vector<int> list[1001];
 
-void dfs(int x)
+void bfs(int x)
 {
+	queue<int> q;
+	q.push(x);
 	check[x] = 1;
 
-	for (auto i : list[x])
+	while (!q.empty())
 	{
-		if (check[i] == 0)
+		int front = q.front();
+		q.pop();
+
+		for (auto i : list[front])
 		{
-			dfs(i);
+			if (check[i] == 0)
+			{
+				q.push(i);
+				check[i] = 1;
+			}
 		}
 	}
 }
@@ -42,7 +52,7 @@ int main(void)
 		if (check[i] == 0)
 		{
 			cnt++;
-			dfs(i);
+			bfs(i);
 		}
 	}
 
