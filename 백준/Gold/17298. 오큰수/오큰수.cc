@@ -2,47 +2,41 @@
 #include <stack>
 #include <vector>
 #include <algorithm>
-
 using namespace std;
-
-// 17298번
 
 int main(void)
 {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
 	int n;
 	cin >> n;
 
-	vector<int> nge; // 처음 입력값
-	stack<int> temp;
-	vector<int> result; // 결과 담기
+	stack<int> stk;
+	vector<int> ipt(n, 0);
+	vector<int> result(n, 0);
 
 	for (int i = 0; i < n; i++)
 	{
-		int num;
-		cin >> num;
+		cin >> ipt[i];
 
-		nge.push_back(num);
+		while (!stk.empty() && ipt[stk.top()] < ipt[i])
+		{
+			result[stk.top()] = ipt[i];
+			stk.pop();
+		}
+		stk.push(i);
 	}
 
-	
-	for (int i = n - 1; i >= 0; i--)
+	while (!stk.empty())
 	{
-		while (!temp.empty() && temp.top() <= nge[i])
-			temp.pop();
-
-		if (temp.empty())
-			result.push_back(-1);
-		else
-			result.push_back(temp.top());
-
-		temp.push(nge[i]);
+		result[stk.top()] = -1;
+		stk.pop();
 	}
 
-	reverse(result.begin(), result.end());
-
-	for (int i = 0; i < result.size(); i++)
+	for (int i = 0; i < n; i++)
 	{
 		cout << result[i] << " ";
 	}
-	return 0;
 }
