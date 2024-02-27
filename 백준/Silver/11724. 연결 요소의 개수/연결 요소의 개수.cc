@@ -1,34 +1,28 @@
 #include <iostream>
 #include <vector>
-#include <queue>
 #include <algorithm>
 
+// 11724
 using namespace std;
 
-// 11724번
-
 int n, m;
-int check[10001] = { 0 };
-vector<int> list[1001];
+vector<vector<int>> lst;
+vector<bool> check;
 
-void bfs(int x)
+void dfs(int x)
 {
-	queue<int> q;
-	q.push(x);
-	check[x] = 1;
+	if (check[x] == true)
+		return;
 
-	while (!q.empty())
+	check[x] = true;
+
+	for (int i = 0; i < lst[x].size(); i++)
 	{
-		int front = q.front();
-		q.pop();
+		int num = lst[x][i];
 
-		for (auto i : list[front])
+		if (check[num] == false)
 		{
-			if (check[i] == 0)
-			{
-				q.push(i);
-				check[i] = 1;
-			}
+			dfs(num);
 		}
 	}
 }
@@ -36,27 +30,30 @@ void bfs(int x)
 int main(void)
 {
 	cin >> n >> m;
-	
+
+	lst.resize(n + 1);
+	check.resize(n + 1, false);
+
 	for (int i = 0; i < m; i++)
 	{
 		int a, b;
 		cin >> a >> b;
-
-		list[a].push_back(b);
-		list[b].push_back(a);
+		lst[a].push_back(b);
+		lst[b].push_back(a);
 	}
 
-	int cnt = 0;
+	int count = 0;
 	for (int i = 1; i <= n; i++)
 	{
-		if (check[i] == 0)
+		if (check[i] == false)
 		{
-			cnt++;
-			bfs(i);
+			dfs(i);
+			count++;
 		}
 	}
+	cout << count;
 
-	cout << cnt;
+
 
 	return 0;
 }
