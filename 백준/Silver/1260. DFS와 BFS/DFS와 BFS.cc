@@ -5,81 +5,73 @@
 
 using namespace std;
 
-// 1260번 dfs와 bfs
-
 int n, m, v;
-int db[1001][1001] = { 0 };
-int c_DFS[1001] = { 0 };
-int c_BFS[1001] = { 0 };
-int cnt = 0;
-vector<int> v_DFS;
-vector<int> v_BFS;
+vector<vector<int>> vec;
+vector<int> check;
 
 void dfs(int x)
 {
-	c_DFS[x] = 1;
-	v_DFS.push_back(x);
+	check[x] = 1;
+	cout << x << " ";
 
-	for (int i = 1; i <= n; i++)
+	for (int i : vec[x])
 	{
-		if (c_DFS[i] == 0 && db[x][i] == 1)
-		{
+		if (check[i] == 0)
 			dfs(i);
-		}
 	}
 }
 
 void bfs(int x)
 {
-	queue<int> q;
-	q.push(x); // 첫번째 방문
-	c_BFS[x] = 1;
-
-	while (!q.empty()) // 큐가 안비어있다면 실행
+	queue<int>q;
+	q.push(x);
+	check[x] = 1;
+	cout << x << " ";
+	while (!q.empty())
 	{
-		int f = q.front(); // 큐 앞에 있는것 저장
+		int f = q.front();
 		q.pop();
-		v_BFS.push_back(f); // 방문했다고 표시
-
-		for (int i = 1; i <= n; i++)
+		for (int i : vec[f])
 		{
-			if (c_BFS[i] == 0 && db[f][i] == 1) // 아직 방문한적 없는데 연결되어있는 노드
+			if (check[i] == 0)
 			{
-				q.push(i); // 저장
-				c_BFS[i] = 1; // 이제 방문 표시
+				q.push(i);
+				check[i] = 1;
+				cout << i << " ";
 			}
 		}
 	}
-
 }
-
 
 int main(void)
 {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
 	cin >> n >> m >> v;
+	vec.resize(n + 1);
+	check.resize(n + 1, 0);
+	
 	for (int i = 0; i < m; i++)
 	{
-		int a, b;
-		cin >> a >> b;
-
-		db[a][b] = 1;
-		db[b][a] = 1;
+		int x, y;
+		cin >> x >> y;
+		vec[x].push_back(y);
+		vec[y].push_back(x);
 	}
-
+	for (int i = 1; i <= n; i++)
+	{
+		sort(vec[i].begin(), vec[i].end());
+	}
 
 	dfs(v);
-	for (int i = 0; i < v_DFS.size(); i++)
-	{
-		cout << v_DFS[i] << " ";
-	}
+
+	fill(check.begin(), check.end(), 0);
 	cout << "\n";
 
-
 	bfs(v);
-	for (int i = 0; i < v_BFS.size(); i++)
-	{
-		cout << v_BFS[i] << " ";
-	}
+
 
 	return 0;
 }
