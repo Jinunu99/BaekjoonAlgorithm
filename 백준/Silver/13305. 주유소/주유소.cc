@@ -1,8 +1,8 @@
 #include <iostream>
 
 using namespace std;
-int dis[100000] = { 0 };
-int city[100000] = { 0 };
+long long dis[100000] = { 0 };
+long long city[100000] = { 0 };
 int main(void)
 {
 	int n;
@@ -16,8 +16,8 @@ int main(void)
 		cin >> city[i];
 	}
 
-	int mini = city[0];
-	int total = 0;
+	long long mini = city[0];
+	long long total = 0;
 	for (int i = 0; i < n; i++)
 	{
 		if (mini > city[i])
