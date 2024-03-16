@@ -1,70 +1,72 @@
 #include <iostream>
 #include <string>
-#include <algorithm>
 
 using namespace std;
 
-// 1541번 잃어버린 괄호
-
 int main(void)
 {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
 	string str;
 	cin >> str;
 
 	bool flag = false;
-	for (int i = 0; i < str.length(); i++)
+
+	for (int i = 0; i < str.size(); i++)
 	{
 		if (str[i] == '-')
-			flag = true;
-		else if (str[i] == '+' && flag == true)
-			str.replace(i, 1, "-");
-	}
-
-	int idx = 0;
-	bool plus = true;
-
-	for (int i = 0; i <= str.length(); i++)
-	{
-		if (str[i] == '+' || str[i] == '-' || str[i] == '\0')
 		{
-			if (str[i] == '-')
-				plus = false;
-
-			idx = i;
-			break;
+			flag = true;
+		}
+		else if (str[i] == '+')
+		{
+			if (flag == true)
+				str[i] = '-';
 		}
 	}
-	
-	int result = stoi(str.substr(0, idx + 1));
-	string temp;
 
-	for (int i = idx + 1; i <= str.length(); i++)
+	string inner;
+	bool plus = true;
+	int total = 0;
+
+	for (int i = 0; i < str.size(); i++)
 	{
-		if (str[i] == '+' || str[i] == '-' || str[i] == '\0')
+		if (str[i] == '+' || str[i] == '-')
 		{
 			if (plus == true)
 			{
-				result += stoi(temp);
+				total += stoi(inner);
+				inner.clear();
 			}
 			else
 			{
-				result -= stoi(temp);
+				total -= stoi(inner);
+				inner.clear();
 			}
 
 			if (str[i] == '+')
 				plus = true;
 			else
 				plus = false;
-
-			temp = "";
 		}
 		else
 		{
-			temp += str[i];
+			inner += str[i];
 		}
 	}
 
-	cout << result;
+	if (plus == true)
+	{
+		total += stoi(inner);
+	}
+	else
+	{
+		total -= stoi(inner);
+	}
+	cout << total;
+
 
 	return 0;
 }
